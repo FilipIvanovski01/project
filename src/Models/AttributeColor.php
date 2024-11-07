@@ -8,7 +8,11 @@ class AttributeColor extends Attribute
     {
         parent::__construct($displayValue,$value);
     }
-   
+    
+    public function getAttributeType(): string
+    {
+        return "color";
+    }
     /**
      * Get the value of displayValue
      */ 

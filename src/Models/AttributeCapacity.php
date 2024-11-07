@@ -8,6 +8,11 @@ class AttributeCapacity extends Attribute
     {
         parent::__construct($displayValue,$value);
     }
+
+    public function getAttributeType(): string
+    {
+        return "capacity";
+    }
     /**
      * Get the value of displayValue
      */ 

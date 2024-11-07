@@ -15,10 +15,22 @@ class AttributeController
 
     public function getAll()
     {
+        $attributes = [];
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder 
-            ->select("*")
-            ->from("Attribute");
-        return $queryBuilder->fetchAllAssociative();
+            ->select("p.product_id, at.name as attribute_type, a.display_value,a.value")
+            ->from("ProductAttribute","p")
+            ->innerJoin('p','Attribute','a','p.attribute_id = a.id')
+            ->innerJoin('a','AttributeType','at','a.attribute_type_id = at.id');
+        foreach($queryBuilder->fetchAllAssociative() as $row){
+            if(!isset($attributes[$row['attribute_type']])){
+                $attributes[$row['attribute_type']] = [];
+                $attributes[$row['attribute_type']][] = $row;
+            }else{
+                $attributes[$row['attribute_type']][] = $row;
+            }
+        }
+
+        return $attributes;
     }
 }

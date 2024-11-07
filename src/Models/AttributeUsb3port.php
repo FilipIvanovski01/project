@@ -2,11 +2,15 @@
 
 namespace App\Models;
 
-class AttributeUsb3Port extends Attribute
+class AttributeUsb3port extends Attribute
 {
     public function __construct(string $displayValue, string $value)
     {
         parent::__construct($displayValue,$value);
+    }
+    public function getAttributeType(): string
+    {
+        return "usb3port";
     }
     /**
      * Get the value of displayValue

@@ -8,6 +8,11 @@ class AttributeSize extends Attribute
     {
         parent::__construct($displayValue,$value);
     }
+
+    public function getAttributeType(): string
+    {
+        return "size";
+    }
     /**
      * Get the value of displayValue
      */ 

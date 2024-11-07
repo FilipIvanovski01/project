@@ -14,7 +14,7 @@ abstract class Attribute
         $this->setDisplayValue($displayValue);
         $this->setValue($value);
     }
-    
+    abstract public function getAttributeType(): string;
     abstract public function getDisplayValue():string;
     /**
      * return value

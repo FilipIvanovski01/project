@@ -4,34 +4,13 @@ namespace App\Models;
 
 class Category
 {
-    private string $id;
     private string $name;
 
-    public function __construct(string $id, string $name)
+    public function __construct(string $name)
     {
-        $this->setId($id);
         $this->setName($name);
     }
 
-    /**
-     * Get the value of id
-     */ 
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set the value of id
-     *
-     * @return  self
-     */ 
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
 
     /**
      * Get the value of name

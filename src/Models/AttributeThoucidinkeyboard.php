@@ -2,11 +2,16 @@
 
 namespace App\Models;
 
-class AttributeThouchIdInKeyboard extends Attribute
+class AttributeThoucidinkeyboard extends Attribute
 {
     public function __construct(string $displayValue, string $value)
     {
         parent::__construct($displayValue,$value);
+    }
+
+    public function getAttributeType(): string
+    {
+        return "thoucIdInKeyboard";
     }
     /**
      * Get the value of displayValue

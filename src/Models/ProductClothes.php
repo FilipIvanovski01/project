@@ -10,13 +10,13 @@ use App\Models\AttributeColor;
 use App\Models\AttributeSize;
 
 
-class ProductClothe extends Product
+class ProductClothes extends Product
 {
     private const ALLOWED_ATTRIBUTES = [AttributeColor::class, AttributeSize::class];
 
-    public function __construct(string $id, string $name, bool $inStock, string $description, Photo|array $photo, Category $category, Brand $brand, Price $price, Attribute|array $attributes)
+    public function __construct(string $id, string $name, bool $inStock, string $description, Category $category, Brand $brand, Price $price)
     {
-        parent::__construct($id,  $name,  $inStock,  $description, $photo,  $category,  $brand,  $price);
+        parent::__construct($id,  $name,  $inStock,  $description, $category,  $brand,  $price);
 
     }
     public function getAllowedAttributes(): array

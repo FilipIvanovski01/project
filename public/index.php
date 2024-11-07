@@ -3,6 +3,9 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+use App\Controller\AttributeController;
+use App\Controller\PhotoController;
+use App\Controller\PriceController;
 use App\Controller\ProductController;
 use Dotenv\Dotenv;
 
@@ -10,7 +13,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 $dotenv = Dotenv::createImmutable(__DIR__ . '/../src');
 $dotenv->load();
-$product = new ProductController;
+$product = new ProductController();
 echo "<pre>";
 print_r($product->getAll());
 // $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {

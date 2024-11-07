@@ -20,7 +20,7 @@ abstract class Product
     protected Brand $brand;   
     protected Price $price;
 
-    public function __construct(string $id, string $name, bool $inStock, string $description,Photo|array $photos, Attribute|array $attributes,
+    public function __construct(string $id, string $name, bool $inStock, string $description,
     Category $category, Brand $brand, Price $price)
     {
         $this->setId($id);
@@ -30,8 +30,6 @@ abstract class Product
         $this->setCategory($category);
         $this->setBrand($brand);
         $this->setPrice($price);
-        $this->setPhotos($photos);
-        $this->setAttributes($attributes);
     }
     /**
      * Return the value of CONST ALLOWED_ATTRIBUTE
@@ -56,21 +54,20 @@ abstract class Product
     public function setAttributes(Attribute|array $attributes): self
     {
         $attributes = is_array($attributes) ? $attributes : [$attributes];
-        foreach ($attributes as $attribute) {
-            $isAllowed = false;
-            foreach ($this->getAllowedAttributes() as $allowedAttribute) {
-                if ($attribute instanceof $allowedAttribute) {
-                    $isAllowed = true;
-                    break;
+        foreach ($attributes as $attributeType => $a) {
+            foreach($a as $attribute){
+                $isAllowed = false;
+                foreach ($this->getAllowedAttributes() as $allowedAttribute) {
+                    if ($attribute instanceof $allowedAttribute) {
+                        $isAllowed = true;
+                        break;
+                    }
                 }
-            }
-            if (!$isAllowed) {
-                throw new InvalidAttributeException();
-            }
-
-            $this->attributes[] = $attribute;
+                if ($isAllowed) {
+                    $this->attributes[$attributeType][] = $attribute;
+                }
         }
-
+    }
         return $this;
     }
 

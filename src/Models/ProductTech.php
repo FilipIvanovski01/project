@@ -19,9 +19,9 @@ class ProductTech extends Product
      */
     private const ALLOWED_ATTRIBUTES = [AttributeCapacity::class, AttributeColor::class, AttributeThouchIdInKeyboard::class, AttributeUsb3Port::class];
 
-    public function __construct(string $id, string $name, bool $inStock, string $description, Photo|array $photo, Category $category, Brand $brand, Price $price, Attribute|array $attributes)
+    public function __construct(string $id, string $name, bool $inStock, string $description, Category $category, Brand $brand, Price $price)
     {
-        parent::__construct($id,  $name,  $inStock,  $description, $photo,  $category,  $brand,  $price);
+        parent::__construct($id,  $name,  $inStock,  $description,  $category,  $brand,  $price);
     }
     /**
      * Get the value of ALLOWED_ATTRIBUTE
