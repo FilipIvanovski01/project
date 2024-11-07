@@ -13,79 +13,81 @@ use Throwable;
 class GraphQL {
     static public function handle() {
         try {
-            $attributeType = new ObjectType([
-                'name' => 'Attribute',
-                'fields' => [
-                    'value' => [
-                        'type' => Type::string(),
-                        'resolve' => static fn ($attribute): string => $attribute['value'],
-                    ],
-                ],
-            ]);
             $priceType = new ObjectType([
                 'name' => 'Price',
                 'fields' => [
-                    'amount' => [
-                        'type' => Type::float(),
-                        'resolve' => static fn ($price): float => $price['amount'],
-                    ],
-                    'currencyLabel' => [
-                        'type' => Type::string(),
-                        'resolve' => static fn ($price): string => $price['currencyLabel'],
-                    ],
-                    'currencySymbol' => [
-                        'type' => Type::string(),
-                        'resolve' => static fn ($price): string => $price['currencySymbol'],
-                    ],
+                    'amount' => Type::nonNull(Type::float()),
+                    'currencyLabel' => Type::nonNull(Type::string()),
+                    'currencySymbol' => Type::nonNull(Type::string()),
+                ],
+            ]);
+            $photoType = new ObjectType([
+                'name' => 'Photo',
+                'fields' => [
+                    'imageUrl' => Type::nonNull(Type::string()),
+                ],
+            ]);
+            $attributeType = new ObjectType([
+                'name' => 'Attribute',
+                'fields' => [
+                    'displayValue' => Type::nonNull(Type::string()),
+                    'value' => Type::nonNull(Type::string()),
+                ],
+            ]);
+            $categoryType = new ObjectType([
+                'name' => 'Category',
+                'fields' => [
+                    'name' => Type::nonNull(Type::string()),
+                ],
+            ]);
+            $brandType = new ObjectType([
+                'name' => 'Brand',
+                'fields' => [
+                    'name' => Type::nonNull(Type::string()),
+                ],
+            ]);
+            $productType = new ObjectType([
+                'name' => 'Product',
+                'fields' => [
+                    'id' => Type::nonNull(Type::int()),
+                    'name' => Type::nonNull(Type::string()),
+                    'inStock' => Type::nonNull(Type::boolean()),
+                    'description' => Type::string(),
+                    'category' => $categoryType,
+                    'brand' => $brandType,
+                    'price' => $priceType,
+                    'photos' => Type::listOf($photoType),
+                    'attributes' => Type::listOf($attributeType),
                 ],
             ]);
             $queryType = new ObjectType([
-                'name' => 'product',
+                'name' => 'Query',
                 'fields' => [
-                    'id' => [
-                        'type' => Type::string(),
-                        'resolve' => static fn ($id): string => $id['id'],
+                    'products' => [
+                        'type' => Type::listOf($productType),
+                        'resolve' => function () {
+                            $productController = new ProductController();
+                            return $productController->getAll();
+                        },
                     ],
-                    'name' => [
-                        'type' => Type::string(),
-                        'resolve' => static fn ($name): string => $name['name'],
-                    ],
-                    'inStock' => [
-                        'type' => Type::boolean(),
-                        'resolve' => static fn ($inStock): bool => $inStock['inStock'],
-                    ],
-                    'description' => [
-                        'type' => Type::string(),
-                        'resolve' => static fn ($description): string => $description['description'],
-                    ],
-                    'gallery' => [
-                        'type' => Type::listOf(Type::string()),
-                        'resolve' => static fn ($photo): array => $photo['photos'],
-                    ],
-                    'attributes' => [
-                        'type' => Type::listOf(Type::string()), 
-                        'resolve' => static fn ($attributes): array => $attributes['attributes'],
-                    ],
-                    'category' => [
-                        'type' => Type::string(),
-                        'resolve' => static fn ($category): string => $category['category']->getName(),
-                    ],
-                    'brand' => [
-                        'type' => Type::string(),
-                        'resolve' => static fn ($brand): string => $brand['brand']->getName(),
-                    ],
-                   'price' => [
-                        'type' => $priceType,
-                        'resolve' => static fn ($rootValue): array => [
-                            'amount' => $rootValue['price']->getAmount(),
-                            'currencyLabel' => $rootValue['price']->getCurrencyLabel(),
-                            'currencySymbol' => $rootValue['price']->getCurrencySymbol(),
+                    'product' => [
+                        'type' => $productType,
+                        'args' => [
+                            'id' => Type::nonNull(Type::int()),
                         ],
-
+                        'resolve' => function ($root, $args) {
+                            $productController = new ProductController();
+                            $allProducts = $productController->getAll();
+                            foreach ($allProducts as $product) {
+                                if ($product->getId() === $args['id']) {
+                                    return $product;
+                                }
+                            }
+                            return null;
+                        },
                     ],
-                ]
+                ],
             ]);
-        
             $mutationType = new ObjectType([
                 'name' => 'Mutation',
                 'fields' => [
